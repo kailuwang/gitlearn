@@ -1,0 +1,236 @@
+*&---------------------------h-a-n-d-模-版-程-序-----------------------*
+*&程序名称/Program Name         : Z201903_06_TEST012
+*&程序描述/Program Des.         : HAND_201903_ABAP培训_模板
+*&程序版本/Program Ver.         : HAND_SAP_2019_03_ABAP_training_V1_1004
+*&申请单位/Applicant            : HAND SAP 201903 ABAP 培训中心
+*&申请人/Applicant              : HAND SAP 201903 ABAP 培训中心
+*&申请日期/Date of App          : 2019-03-28
+*&开发单位/Development Company  : 汉得/HAND
+*&作者/Author                   : 王凯路
+*&完成日期/Completion Date      : 2019-03-28
+*&---------------------------H-A-N-D-模-版-程-序-----------------------*
+*&摘要：
+*&   一. 业务背景
+*&      1).201903汉得ABAP 培训,ABAP语法定义参照；
+*&      2).快速了解ABAP 选择屏幕使用；
+*&      3).方便后续代码公司统一化，规范化；
+*&   二. 使用场景
+*&       1).201903汉得ABAP培训，培训生程序讲解和后续使用；
+*&       2).后续项目客户培训，代码讲解参考；
+*&       3).后续项目代码语法定义参照；
+*&   三. 程序使用：
+*&      1).参照此程序语法定义格式、注释；
+*&      2).参照此程序练习语法；
+*&      3).形成个人良好的代码书写规范；
+*&      4).新人持续更新代码库，提交此类程序更新版本；
+*&注意：
+*&   一. 代码规范
+*&       遵循 《汉得SAP标准化程序开发规范 V1.0》；
+*&   二. 代码更改
+*&       个人代码更改点为如下代码片段（非此片段不能更改）：
+*&   三. 代码注释
+*&       注释全面、简洁明了（单行，字数25以内）；
+*&---------------------------------------------------------------------*
+*&变更记录：                                                           *
+*&Date         Developer           ReqNo       Descriptions            *
+*& ==========  ==================  ==========  ========================*
+*& 2019-03-20  王凯路                           初始开发
+*&---------------------------------------------------------------------*
+REPORT  Z201903_06_TEST012.
+*----------------------------------------------------------------------*
+* 数据库表声明/Database table declaration
+*----------------------------------------------------------------------*
+*&---声明数据库tables
+
+
+*----------------------------------------------------------------------*
+* 结构声明类型/Structure type declaration
+*----------------------------------------------------------------------*
+*&---声明结构types/data: ty_/gs_/gt_
+
+
+
+*----------------------------------------------------------------------*
+* 全局变量定义/Global variable definition
+*----------------------------------------------------------------------*
+*&---全局变量，data:gv_
+
+
+*&---------------------------------------------------------------------*
+*& 字段串定义/Field-symbols                                            *
+*&---------------------------------------------------------------------*
+*&---定义字段串，field-symbols:<fs_ >
+
+*&---------------------------------------------------------------------*
+*&  ALV TYPE/ALV 类型定义
+*&---------------------------------------------------------------------*
+*&---ALV数据组，类型池
+TYPE-POOLS:SLIS.
+
+*&----定义ALV 显示的字段列及其描述等属性
+
+DATA:GT_FIELDCAT  TYPE TABLE OF LVC_S_FCAT,    "ALV 控制：字段目录
+     GS_FIELDCAT  TYPE LVC_S_FCAT,             "ALV 控制：字段目录
+     GS_LAYOUT    TYPE LVC_S_LAYO.             "ALV 控制：布局结构
+*&---------------------------------------------------------------------*
+*& Selection Screen/选择屏幕
+*&---------------------------------------------------------------------*
+*&---定义选择屏幕，parameters/select-options：P_/S_
+SELECTION-SCREEN BEGIN OF BLOCK BLK01 WITH FRAME TITLE TEXT-101.
+*&---定义选择屏幕，parameters/select-options：P_/S_
+
+  SELECTION-SCREEN END OF BLOCK BLK01.
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& INITIALIZATION/选择屏幕前初始化                                     *
+*&---------------------------------------------------------------------*
+INITIALIZATION.
+*&---初始化选择屏幕值
+
+*&---------------------------------------------------------------------*
+*& at selection-screen/选择屏幕开始                                    *
+*&---------------------------------------------------------------------*
+AT SELECTION-SCREEN.
+*&---------------------------------------------------------------------*
+*& at selection-screen output/选择屏幕输出                             *
+*&---------------------------------------------------------------------*
+
+AT SELECTION-SCREEN OUTPUT.
+*&---------------------------------------------------------------------*
+*& Start-of-selection/开始选择屏幕                                     *
+*&---------------------------------------------------------------------*
+
+START-OF-SELECTION.
+*&---数据处理，数据输出(AVL/LIST/WRITE)，功能应用
+
+*&---获取数据
+*   perform frm_getdata.
+
+*&---数据输出
+*   PERFORM frm_print.
+*& ---ALV 输出
+*&----设置ALV 输出格式
+PERFORM INIT_LAYOUT.
+*&----设置ALV 输出字段
+PERFORM FRM_FIELDCAT.
+*&-----ALV 显示
+PERFORM FRM_DISPLAY_ALV.
+*&---------------------------------------------------------------------*
+*& end-of-selection/结束选择屏幕（程序结束处理，输出等）               *
+*&---------------------------------------------------------------------*
+END-OF-SELECTION.
+*&---程序结束处理，FREE
+
+FORM INIT_LAYOUT .
+  CLEAR GS_LAYOUT.
+  GS_LAYOUT-ZEBRA      = 'X'.  "斑马线
+  GS_LAYOUT-CWIDTH_OPT = 'X'.  "自动调整ALVL 列宽
+  GS_LAYOUT-BOX_FNAME  = 'BOX'.  " left selected flag
+  GS_LAYOUT-INFO_FNAME = 'COLOR'.
+
+ENDFORM.                    " INIT_LAYOUT
+*&---------------------------------------------------------------------*
+*&      Form  FRM_FIELDCAT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*  -->  p1        text
+*  <--  p2        text
+*----------------------------------------------------------------------*
+FORM FRM_FIELDCAT .
+*&---常用目录字段说明，，涉及字段必须大写
+*  gs_fieldcat-key        = 'X'.        " key 值
+*  gs_fieldcat-fieldname  = 'MATNR'.    " 字段技术名称
+*  gs_fieldcat-coltext    = '物料号'.   " 显示名称
+*  gs_fieldcat-ref_table  = 'MARA'.     " 参照表，标准功能实现例如搜索帮助
+*  gs_fieldcat-ref_field  = 'MATNR'.    " 参照表字段，标准功能实现例如搜索帮助
+*  gs_fieldcat-qfieldname = ''.         " ALV 控制: 参考计量单位的字段名称
+*  gs_fieldcat-EDIT       = ''.         " 是否可以编辑
+*  gs_fieldcat-ICON       = ''.         " 是否图片
+*  gs_fieldcat-outputlen  = ''.         " 输出长度
+*  gs_fieldcat-CHECKBOX   = ''.         " 选择框
+*&---常用目录字段说明
+
+*&---ALV 输出字段目录，涉及字段必须大写
+*  CLEAR GS_FIELDCAT.
+*  GS_FIELDCAT-KEY        = 'X'.
+*  GS_FIELDCAT-FIELDNAME  = 'BELNR'.
+*  GS_FIELDCAT-COLTEXT    = '凭证编号'.
+*  GS_FIELDCAT-REF_TABLE  = 'BKPF'.
+*  GS_FIELDCAT-REF_FIELD  = 'BELNR'.
+*  APPEND GS_FIELDCAT TO GT_FIELDCAT.
+
+ENDFORM.                    " FRM_FIELDCAT
+*&---------------------------------------------------------------------*
+*&      Form  FRM_DISPLAY_ALV
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+*  -->  p1        text
+*  <--  p2        text
+*----------------------------------------------------------------------*
+FORM FRM_DISPLAY_ALV .
+*&---ALV 显示函数
+  CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY_LVC'
+    EXPORTING
+      I_CALLBACK_PROGRAM       = SY-REPID
+      IS_LAYOUT_LVC            = GS_LAYOUT
+      IT_FIELDCAT_LVC          = GT_FIELDCAT[]
+      I_CALLBACK_PF_STATUS_SET = 'FRM_PF_STATUS'
+      I_CALLBACK_USER_COMMAND  = 'FRM_USER_COMMAND'
+      I_DEFAULT                = 'X'
+      I_SAVE                   = 'A'
+    TABLES
+      T_OUTTAB                 = GT_ITAB
+    EXCEPTIONS
+      PROGRAM_ERROR            = 1
+      OTHERS                   = 2.
+    IF SY-SUBRC <> 0.
+      MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+      WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+    ENDIF.
+
+ENDFORM.                    " FRM_DISPLAY_ALV
+
+FORM FRM_PF_STATUS USING RT_EXTAB TYPE SLIS_T_EXTAB.
+  SET PF-STATUS 'STANDARD'.
+ENDFORM.                    "FRM_PF_STATUS
+*&---------------------------------------------------------------------*
+*&      Form  FRM_DISPLAY                                              *
+*&---------------------------------------------------------------------*
+*&       ALV工具栏命令                                                 *
+*&---------------------------------------------------------------------*
+*&  -->  p1    text                                                    *
+*&  <--  p2    text                                                    *
+*&---------------------------------------------------------------------*
+FORM FRM_USER_COMMAND  USING R_UCOMM LIKE SY-UCOMM
+                        RS_SELFIELD TYPE SLIS_SELFIELD.
+*&---刷新屏幕数据到内表
+  DATA: LR_GRID1 TYPE REF TO CL_GUI_ALV_GRID.
+  CALL FUNCTION 'GET_GLOBALS_FROM_SLVC_FULLSCR'
+    IMPORTING
+      E_GRID = LR_GRID1.
+  CALL METHOD LR_GRID1->CHECK_CHANGED_DATA.
+
+*&---按钮功能实现
+  CASE R_UCOMM.
+
+    WHEN 'INSERT'.
+      APPEND INITIAL LINE TO GT_ITAB.
+    WHEN 'TEST'.
+      MESSAGE 'TEST BUTTON' TYPE 'E'.
+  ENDCASE.
+
+*&---调用后数据保存处理
+  CALL FUNCTION 'GET_GLOBALS_FROM_SLVC_FULLSCR'
+    IMPORTING
+      E_GRID = LR_GRID1.
+  CALL METHOD LR_GRID1->CHECK_CHANGED_DATA.
+*&---刷新ALV 显示值
+  RS_SELFIELD-REFRESH = 'X' .
+
+ENDFORM.                    "FRM_USER
